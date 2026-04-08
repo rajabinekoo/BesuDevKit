@@ -1,6 +1,6 @@
 import solc from "solc";
 import { join } from "node:path";
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 import config from "./config";
 import { checkContractsOutDir, getPrecompiledContractsList } from "./utils/fs";
@@ -45,12 +45,16 @@ async function compile(contracts: IContractPath[]): Promise<void> {
     const contract = <ICompiledContract>(
       Object.values(output.contracts[contractName])[0]
     );
-    const contractInsideName = Object.keys(output.contracts[contractName])[0];
+    const path = contractName.split("/");
+    path.pop();
+    await mkdir(join(__dirname, "..", config.artifactsDirName, ...path), {
+      recursive: true,
+    });
     const outFile = join(
       __dirname,
       "..",
       config.artifactsDirName,
-      contractInsideName + ".json",
+      contractName.replace(".sol", "") + ".json",
     );
     await writeFile(
       outFile,
