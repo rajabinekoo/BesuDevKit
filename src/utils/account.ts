@@ -33,4 +33,4 @@ class AccountManagement {
   }
 }
 
-export const accounts = new AccountManagement();
+export const accountsManagement = new AccountManagement();
