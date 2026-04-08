@@ -1,5 +1,5 @@
-import { accounts } from "../utils/account";
-import { deployContract } from "../utils/contract";
+import { accounts } from "./utils/account";
+import { deployContract } from "./utils/contract";
 
 async function main() {
   const [owner] = await accounts.getAccounts();

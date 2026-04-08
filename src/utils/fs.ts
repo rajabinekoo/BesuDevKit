@@ -15,7 +15,7 @@ export async function deleteDirectory(dirPath: string) {
 }
 
 export async function checkContractsOutDir() {
-  const path = resolve(__dirname, "..", config.artifactsDirName);
+  const path = resolve(__dirname, "../..", config.artifactsDirName);
   await deleteDirectory(path);
   await mkdir(path, { recursive: true });
 }
@@ -23,7 +23,7 @@ export async function checkContractsOutDir() {
 export async function getPrecompiledContractsList(
   dir = "",
 ): Promise<Array<IContractPath>> {
-  const contractsDir = join(__dirname, "../contracts", dir);
+  const contractsDir = join(__dirname, "../../contracts", dir);
   const contractsList = await readdir(contractsDir);
   const contractPaths: IContractPath[] = [];
   for (const contractName of contractsList) {
@@ -46,7 +46,7 @@ export async function getContractArtifact(
   try {
     const path = join(
       __dirname,
-      "..",
+      "../..",
       config.artifactsDirName,
       `${contractName.replace(".json", "")}.json`,
     );

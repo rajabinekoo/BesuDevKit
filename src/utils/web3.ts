@@ -1,6 +1,7 @@
 import { Web3 } from "web3";
+import config from "../config";
 
-export const web3 = new Web3("http://192.168.1.6:8545");
+export const web3 = new Web3(config.rpcAddress);
 
 export async function transferEth(
   from: string,

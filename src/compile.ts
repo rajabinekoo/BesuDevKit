@@ -2,14 +2,14 @@ import solc from "solc";
 import { join } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 
-import config from "../config";
-import { checkContractsOutDir, getPrecompiledContractsList } from "../utils/fs";
+import config from "./config";
+import { checkContractsOutDir, getPrecompiledContractsList } from "./utils/fs";
 import {
   solcOutput,
   IContractPath,
   solcInputSources,
   ICompiledContract,
-} from "../types";
+} from "./types";
 
 async function compile(contracts: IContractPath[]): Promise<void> {
   const sources: solcInputSources = {};
