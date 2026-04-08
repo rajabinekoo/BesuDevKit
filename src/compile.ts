@@ -31,14 +31,29 @@ async function compile(contracts: IContractPath[]): Promise<void> {
   const output: solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
 
   if (Array.isArray(output.errors)) {
-    output.errors.forEach((err, i) => {
-      const seperator =
-        (output.errors || []).length - 1 === i
-          ? ""
-          : "-------------------------------------";
-      console.log([err.message, err.formattedMessage, seperator].join("\n"));
-    });
-    throw new Error("Compilation failed");
+    const errors = output.errors.filter((err) => err.severity === "error");
+    if (errors.length > 0) {
+      errors.forEach((err, i) => {
+        const seperator =
+          (errors || []).length - 1 === i
+            ? ""
+            : "-------------------------------------";
+        console.log([err.message, err.formattedMessage, seperator].join("\n"));
+      });
+      throw new Error("Compilation failed");
+    }
+
+    const warnings = output.errors.filter((err) => err.severity === "warning");
+    if (warnings.length > 0) {
+      console.warn("Warnings found during compilation:");
+      warnings.forEach((err, i) => {
+        const seperator =
+          (output.errors || []).length - 1 === i
+            ? ""
+            : "-------------------------------------";
+        console.log([err.message, err.formattedMessage, seperator].join("\n"));
+      });
+    }
   }
 
   for (const contractName in output.contracts) {
