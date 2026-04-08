@@ -1,32 +1,15 @@
 import solc from "solc";
-import { join, resolve } from "node:path";
-import { readdir, mkdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { readFile, writeFile } from "node:fs/promises";
 
 import config from "../config";
+import { checkContractsOutDir, getPrecompiledContractsList } from "../utils/fs";
 import {
   solcOutput,
   IContractPath,
   solcInputSources,
   ICompiledContract,
 } from "../types";
-
-async function getContractsList(dir = ""): Promise<Array<IContractPath>> {
-  const contractsDir = join(__dirname, "../contracts", dir);
-  const contractsList = await readdir(contractsDir);
-  const contractPaths: IContractPath[] = [];
-  for (const contractName of contractsList) {
-    if (!contractName.endsWith(".sol")) {
-      const list = await getContractsList(join(dir, contractName));
-      contractPaths.push(...list);
-      continue;
-    }
-    contractPaths.push({
-      name: contractName,
-      path: join(contractsDir, contractName),
-    });
-  }
-  return contractPaths;
-}
 
 async function compile(contracts: IContractPath[]): Promise<void> {
   const sources: solcInputSources = {};
@@ -73,10 +56,8 @@ async function compile(contracts: IContractPath[]): Promise<void> {
 }
 
 async function main() {
-  await mkdir(resolve(__dirname, "..", config.artifactsDirName), {
-    recursive: true,
-  });
-  const list = await getContractsList();
+  await checkContractsOutDir();
+  const list = await getPrecompiledContractsList();
   await compile(list);
 }
 

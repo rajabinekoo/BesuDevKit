@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "deploy": "ts-node scripts/deploy.ts",
     "compile": "ts-node scripts/compile.ts"
   },
   "keywords": [],
