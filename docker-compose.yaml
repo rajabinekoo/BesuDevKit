@@ -1,0 +1,50 @@
+services:
+  geth-node:
+    image: ethereum/client-go
+    container_name: geth-node
+    restart: unless-stopped
+    ports:
+      - "30303:30303"   # P2P
+      - "8545:8545"     # HTTP‑RPC
+      - "8546:8546"     # WebSocket‑RPC
+    volumes:
+      - ./data/geth:/root/.ethereum
+    command: >
+      --datadir /root/.ethereum
+      --http
+      --http.addr 0.0.0.0
+      --http.port 8545
+      --http.api eth,web3,personal,net,txpool
+      --http.corsdomain "*"
+      --http.vhosts "*"
+      --ws
+      --ws.addr 0.0.0.0
+      --ws.port 8546
+      --ws.api eth,web3,personal,net,txpool
+      --networkid 1337
+      --syncmode "snap"
+      --maxpeers 25
+      --allow-insecure-unlock
+      --dev
+
+  besu-node:
+    image: hyperledger/besu
+    container_name: besu-node
+    restart: unless-stopped
+    ports:
+      - "30304:30303"   # Besu uses the same P2P port (use a different host port to avoid collision)
+      - "8547:8545"     # HTTP‑RPC
+      - "8548:8546"     # WebSocket‑RPC
+    volumes:
+      - ./data/besu:/opt/besu/data
+    command: >
+      --data-path /opt/besu/data
+      --rpc-http-enabled
+      --rpc-http-host 0.0.0.0
+      --rpc-http-port 8545
+      --rpc-ws-enabled
+      --rpc-ws-host 0.0.0.0
+      --rpc-ws-port 8546
+      --sync-mode SNAP
+      --network-id 1337
+

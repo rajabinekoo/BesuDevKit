@@ -1,0 +1,6 @@
+data
+artifacts
+node_modules
+
+.idea
+.vscode
