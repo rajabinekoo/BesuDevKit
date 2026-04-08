@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execSync } from "node:child_process";
-import { mkdir, readdir, readFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat } from "node:fs/promises";
 
 import config from "../config";
 import { IContract, IContractPath } from "../types";
@@ -26,17 +26,25 @@ export async function getPrecompiledContractsList(
   const contractsDir = join(__dirname, "../../contracts", dir);
   const contractsList = await readdir(contractsDir);
   const contractPaths: IContractPath[] = [];
+
   for (const contractName of contractsList) {
-    if (!contractName.endsWith(".sol")) {
+    const fullPath = join(contractsDir, contractName);
+
+    const statResult = await stat(fullPath);
+
+    if (!contractName.endsWith(".sol") && statResult.isDirectory()) {
       const list = await getPrecompiledContractsList(join(dir, contractName));
       contractPaths.push(...list);
       continue;
     }
+
+    const relativePath = join(dir, contractName).replace(/\\/g, "/");
     contractPaths.push({
-      name: contractName,
-      path: join(contractsDir, contractName),
+      name: relativePath,
+      path: fullPath,
     });
   }
+
   return contractPaths;
 }
 

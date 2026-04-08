@@ -30,6 +30,17 @@ async function compile(contracts: IContractPath[]): Promise<void> {
 
   const output: solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
 
+  if (Array.isArray(output.errors)) {
+    output.errors.forEach((err, i) => {
+      const seperator =
+        (output.errors || []).length - 1 === i
+          ? ""
+          : "-------------------------------------";
+      console.log([err.message, err.formattedMessage, seperator].join("\n"));
+    });
+    throw new Error("Compilation failed");
+  }
+
   for (const contractName in output.contracts) {
     const contract = <ICompiledContract>(
       Object.values(output.contracts[contractName])[0]
