@@ -1,6 +1,7 @@
 data
 artifacts
 node_modules
+wallets.json
 
 .idea
 .vscode
