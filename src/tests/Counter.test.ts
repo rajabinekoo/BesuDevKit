@@ -9,7 +9,7 @@ describe("Counter Smart Contract Test Cases", () => {
 
   beforeAll(async () => {
     accounts = await accountsManagement.getAccounts();
-    counterContract = await deployContract("Counter", {
+    counterContract = await deployContract("Counter", [], {
       from: accounts[0].address,
     });
   });

@@ -4,7 +4,7 @@ import { accountsManagement } from "./utils/account";
 async function main() {
   const [owner] = await accountsManagement.getAccounts();
 
-  const deployedContract = await deployContract("Counter", {
+  const deployedContract = await deployContract("Counter", [], {
     from: owner.address,
   });
 

@@ -14,6 +14,7 @@ export async function getContract(
 
 export async function deployContract(
   contractName: string,
+  constructorArgs?: any[],
   options?: PayableCallOptions | undefined,
 ): Promise<Contract<ContractAbi>> {
   const artifact = await getContractArtifact(contractName);
@@ -21,7 +22,8 @@ export async function deployContract(
   const contract = new web3.eth.Contract(artifact.abi);
   return await contract
     .deploy({
-      data: '0x' + artifact.bytecode,
+      data: "0x" + artifact.bytecode,
+      arguments: constructorArgs || [],
     })
     .send(options);
 }
