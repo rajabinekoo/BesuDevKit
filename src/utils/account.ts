@@ -46,9 +46,10 @@ class AccountManagement {
       const privateKeys = JSON.parse(
         await readFile(path, "utf8"),
       ) as Array<string>;
-      return privateKeys.map((pvKey) =>
-        web3.eth.accounts.privateKeyToAccount(pvKey),
-      );
+      return privateKeys.map((pvKey) => {
+        web3.eth.accounts.wallet.add(pvKey);
+        return web3.eth.accounts.privateKeyToAccount(pvKey);
+      });
     } catch {
       await (async () => {
         try {
