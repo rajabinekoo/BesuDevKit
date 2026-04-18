@@ -1,7 +1,8 @@
 {
   "name": "BesuDevKit",
   "version": "1.0.0",
-  "description": "",
+  "author": "Ali Rajabi Nekoo",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -9,9 +10,6 @@
     "deploy": "ts-node src/deploy.ts",
     "compile": "ts-node src/compile.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "solc": "^0.8.34",
